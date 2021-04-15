@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "QklfklwD3dxLNWHgDWJeWolaF1kkLUEanI1/MlWQtgbii5Mit0FYY3KGztrkSCYgaov8XRdIdNoOorl2rp0q0Q==",
+  "dgSpecHash": "ccdFNSCc6nccW6Co3Sv2T2yJ3ZWvvBZwI0/CFrN44cwQIHwzNtl8bLnFE6gZqIdE1xz+ru/z8RMY46rTUvC+3A==",
   "success": true,
   "projectFilePath": "/Users/lkester/Projects/unit-test/TestService.Tests/TestService.Tests.csproj",
   "expectedPackageFiles": [

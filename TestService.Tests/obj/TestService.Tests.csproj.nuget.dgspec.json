@@ -14,7 +14,7 @@
         "outputPath": "/Users/lkester/Projects/unit-test/TestService.Tests/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/lkester/.config/NuGet/NuGet.Config"
+          "/Users/lkester/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
@@ -92,7 +92,7 @@
         "outputPath": "/Users/lkester/Projects/unit-test/TestService/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/lkester/.config/NuGet/NuGet.Config"
+          "/Users/lkester/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
