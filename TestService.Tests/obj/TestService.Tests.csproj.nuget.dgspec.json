@@ -14,7 +14,7 @@
         "outputPath": "/Users/lkester/Projects/unit-test/TestService.Tests/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/lkester/.nuget/NuGet/NuGet.Config"
+          "/Users/lkester/.config/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
@@ -78,7 +78,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.201/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.203/RuntimeIdentifierGraph.json"
         }
       }
     },
@@ -92,7 +92,7 @@
         "outputPath": "/Users/lkester/Projects/unit-test/TestService/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/lkester/.nuget/NuGet/NuGet.Config"
+          "/Users/lkester/.config/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
@@ -130,7 +130,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.201/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.203/RuntimeIdentifierGraph.json"
         }
       }
     }
