@@ -14,73 +14,101 @@ using System;
 
 namespace TestService
 {
-    class Result
+    class Solution
     {
+        private Dictionary<int, int> _data;
 
-        /*
-         * Complete the 'checkMagazine' function below.
-         *
-         * The function accepts following parameters:
-         *  1. STRING_ARRAY magazine
-         *  2. STRING_ARRAY note
-         */
-
-        public static void checkMagazine(List<string> magazine, List<string> note)
+        public Solution()
         {
-            var magWords = countWords(magazine);
-            var noteWords = countWords(note);
+            _data = new Dictionary<int, int>();
 
-            foreach (var word in noteWords.Keys)
-            {
-                //Console.WriteLine("Word: " + word + " Count: " + noteWords[word]);
-                //Console.WriteLine("magWord: " + word + " Count: " + magWords[word]);
-
-                if (!magWords.ContainsKey(word) || noteWords[word] > magWords[word])
-                {
-                    Console.WriteLine("No");
-                    return;
-                }
-                
-            }
-            Console.WriteLine("Yes");
         }
 
-        private static Dictionary<string, int> countWords(List<string> words)
+
+        void addEntry(int entry)
         {
-            var result = new Dictionary<string, int>(words.Count);
-            foreach (var word in words)
+            Console.WriteLine("Add:" + entry);
+
+            if (_data.ContainsKey(entry))
             {
-                //Console.WriteLine("Current word: " + word);
-                if (!result.ContainsKey(word))
+                _data[entry] = _data[entry] + 1;
+            }
+            else
+            {
+                // Create an entry if it doesn't exist
+                _data.Add(entry, 1);
+            }
+        }
+
+        void deleteEntry(int entry)
+        {
+            Console.WriteLine("Delete:" + entry);
+
+            if (_data.ContainsKey(entry) && _data[entry] > 0)
+                _data[entry] = _data[entry] - 1;
+        }
+
+        // print 1 if any integer is present with x occurences
+        int queryEntry(int occureces)
+        {
+            Console.WriteLine("Query:" + occureces);
+
+            if (_data.ContainsValue(occureces))
+                return 1;
+            return 0;
+        }
+
+        // Complete the freqQuery function below. Return the _result
+        static List<int> freqQuery(List<List<int>> queries)
+        {
+            var model = new Solution();
+            var result = new List<int>();
+
+            for (int i = 0; i < queries.Count; i++)
+            {
+                int operation = queries[i][0];
+                int num = queries[i][1];
+
+                Console.WriteLine("op:" + operation);
+                Console.WriteLine("num:" + num);
+
+                switch (operation)
                 {
-                    //Console.WriteLine("Added word: " + word);
-                    result.Add(word, 1);
-                }
-                else
-                {
-                    //Console.WriteLine("Incremented word: " + word);
-                    result[word] = result[word] + 1;
+                    case 1:
+                        model.addEntry(num);
+                        break;
+                    case 2:
+                        model.deleteEntry(num);
+                        break;
+                    case 3:
+                        result.Add(model.queryEntry(num));
+                        break;
+                    default:
+                        break;
                 }
             }
-
             return result;
         }
 
-    }
-
-    public class Solution
-    {
-        public static void Main()
+        static void Main(string[] args)
         {
+            TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
 
-            string magazineWords = "two times three is not four";
-            string noteWords = "two times two is four";
+            int q = Convert.ToInt32(Console.ReadLine().Trim());
 
-            List<string> magazine = magazineWords.TrimEnd().Split(' ').ToList();
+            List<List<int>> queries = new List<List<int>>();
 
-            List<string> note = noteWords.TrimEnd().Split(' ').ToList();
+            for (int i = 0; i < q; i++)
+            {
+                queries.Add(Console.ReadLine().TrimEnd().Split(' ').ToList().Select(queriesTemp => Convert.ToInt32(queriesTemp)).ToList());
+            }
 
-            Result.checkMagazine(magazine, note);
+            List<int> ans = freqQuery(queries);
+
+            textWriter.WriteLine(String.Join("\n", ans));
+
+            textWriter.Flush();
+            textWriter.Close();
         }
     }
 
