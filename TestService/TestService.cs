@@ -18,66 +18,53 @@ namespace TestService
 
     class Solution
     {
-        /*
-       for each item 'i' 
-       create a new set which INCLUDES item 'i' if the total weight does not exceed the capacity, and 
-       recursively process the remaining capacity and items
-
-       create a new set WITHOUT item 'i', and recursively process the remaining items 
-       return the set from the above two sets with higher profit 
-       */
-
-        public int solveKnapsack(int[] profits, int[] weights, int capacity)
+        public int findLCSLength(string s1, string s2)
         {
-            int?[,] profitCache = new int?[capacity + 1, profits.Length + 1];
-            return recursiveSolveKnapsack(profits, weights, capacity, 0, profitCache);
+            // TODO: Optimize by going over the short string
+            Console.WriteLine("Starting\n\n\n");
+            Console.WriteLine(" s1: " + s1 + " s2: " + s2);
+            var longestStr = getLCSRecursive(s1, s2, 0, "");
+            return longestStr.Length;
         }
 
-        // capacity decreases as we add weight
-        // OPTIMIZATION: I can cache the results using the capacity & index
-        public int recursiveSolveKnapsack(int[] profits, int[] weights, int capacity, int index, int?[,] profitCache)
+        
+        public string getLCSRecursive(String s1, String s2, int index, string currentString)
         {
-            // check to see if we are over capacity or out of the index range.  
-            // This means there was no fruit that would fit in the bag
-            if (capacity <= 0 || index >= profits.Length)
-                return 0;
+            if (s1 == null || s1 == "" || s2 == "" || s2 == null || index > (s1.Length -1) )
+                return "";
 
-            // If this profit is in the cache, simply return it
-            if (profitCache[capacity, index] != null)
-                return (int)profitCache[capacity, index];
+            Console.WriteLine(" index: " + index + " currentString: " + currentString);
 
-            //Console.WriteLine("Capacity: " + capacity + " Index: " + index + " Weight: " + weights[index] + " Profit: " + profits[index]);
+            // Don't select the letter, skip over it
+            var choice2 = getLCSRecursive(s1, s2, index + 1, currentString);
 
-            int profit1 = 0;
+            // Select the letter
+            var choice1 = "";
+            var potentialstr = currentString + s1[index];
 
-            // Is there room in the stack for the next item?
-            if (weights[index] <= capacity)
+            // Add the letter we're looking at IF it meets the constraint
+            if (s2.Contains(potentialstr))
             {
-                //Console.WriteLine("Added fruit index: " + index); 
-                // Get the profit if we grab the first item and then recursively get the highest profit 
-                profit1 = profits[index] + recursiveSolveKnapsack(profits, weights, capacity - weights[index], index + 1, profitCache);
+                Console.WriteLine("Added char: " + s1[index]);
+                // Add the letter + the next recursive values
+                choice1 = s1[index] + getLCSRecursive(s1, s2, index + 1, potentialstr);
             }
-            int profit2 = recursiveSolveKnapsack(profits, weights, capacity, index + 1, profitCache);
 
-            //Console.WriteLine("profit1: " + profit1 + " profit2: " + profit2);
+            if (choice1.Length > choice2.Length)
+            {
+                Console.WriteLine("Returned Add string: " + choice1);
+                return choice1;
+            }
 
-            int maxProfit = Math.Max(profit1, profit2);
-
-            // Store the profit we've found
-            profitCache[capacity, index] = maxProfit;
-
-            return maxProfit;
+            Console.WriteLine("Returned Skip string: " + choice2);
+            return choice2;
         }
 
         static void Main(string[] args)
         {
-            Solution ks = new Solution();
-            int[] profits = { 1, 6, 10, 16 };
-            int[] weights = { 1, 2, 3, 5 };
-            int maxProfit = ks.solveKnapsack(profits, weights, 7);
-            Console.WriteLine("Total knapsack profit ---> " + maxProfit);
-            maxProfit = ks.solveKnapsack(profits, weights, 6);
-            Console.WriteLine("Total knapsack profit ---> " + maxProfit);
+            Solution lcs = new Solution();
+            Console.WriteLine(lcs.findLCSLength("abdca", "cbda"));
+            Console.WriteLine(lcs.findLCSLength("passport", "ppsspt"));
         }
     }
 }
