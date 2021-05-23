@@ -16,31 +16,6 @@ namespace TestService
 {
 
 
-    class Bag
-    {
-        // Will hold the indexes of the items
-        public List<int> Values { get; set; }
-        public List<int> Selected { get; set; }
-
-        public int Profit { get; set; }
-        public int Weight { get; set; }
-
-        public Bag()
-        {
-            Values = new List<int>();
-            Selected = new List<int>();
-        }
-
-        public Bag(Bag bag)
-        {
-            Values = new List<int>(bag.Values);
-            Selected = new List<int>(bag.Selected);
-            Profit = bag.Profit;
-            Weight = bag.Weight;
-        }
-
-    }
-
     class Solution
     {
         /*
@@ -54,68 +29,44 @@ namespace TestService
 
         public int solveKnapsack(int[] profits, int[] weights, int capacity)
         {
-            //Console.WriteLine("Starting");
-            // Make new set with everything available, but nothing in the bag
-            Bag bag = new Bag();
-            bag.Values = new List<int>();
-
-            // Add all indexes
-            for (int index = 0; index < profits.Length; index++)
-            {
-                Console.WriteLine("Adding values: " + index);
-                bag.Values.Add(index);
-            }
-          
-            return solveKnapsackRecursive(bag, profits, weights, capacity);
+            int[,] profitCache = new int[capacity + 1, profits.Length + 1];
+            return recursiveSolveKnapsack(profits, weights, capacity, 0, profitCache);
         }
 
-        public int solveKnapsackRecursive(Bag bag, int[] profits, int[] weights, int capacity)
+        // capacity decreases as we add weight
+        // OPTIMIZATION: I can cache the results using the capacity & index
+        public int recursiveSolveKnapsack(int[] profits, int[] weights, int capacity, int index, int[,] profitCache)
         {
-            // Are there more things we could put in the bag? No, then return the weight
-            if (bag.Values.Count <= 0)
-                return bag.Profit;
-            
-            Bag bagA = new Bag(bag);
-            Bag bagNoA = new Bag(bag);
+            // check to see if we are over capacity or out of the index range.  
+            // This means there was no fruit that would fit in the bag
+            if (capacity <= 0 || index >= profits.Length)
+                return 0;
 
-            var profitA = bagA.Profit;
+            // If this profit is in the cache, simply return it
+            if (profitCache[capacity, index] > 0)
+                return profitCache[capacity, index];
 
-            // Pick the next value to look at
-            var index = bag.Values[0];
+            //Console.WriteLine("Capacity: " + capacity + " Index: " + index + " Weight: " + weights[index] + " Profit: " + profits[index]);
 
-            Console.WriteLine("Index: " + index);
+            int profit1 = 0;
 
-            // Remove the first value from bagNoA
-            bagNoA.Values.RemoveAt(0);
-
-            // Calculate the possible new weight
-            var newWeight = bagA.Weight + weights[index];
-
-            Console.WriteLine("Weight: " + newWeight);
-
-            // If it will fit in bag A, then add it.
-            if (newWeight <= capacity)
+            // Is there room in the stack for the next item?
+            if (weights[index] <= capacity)
             {
-                // Add it to the bag and recalculate the weight and profit
-                bagA.Selected.Add(index);
-                bagA.Weight = newWeight;
-                bagA.Profit = bagA.Profit + profits[index];
-                Console.WriteLine("Adding item to bagA: " + index);
-                Console.WriteLine("Profit in bagA: " + bagA.Profit);
-
-                // Recursivly look for more items to put in the bag 
-                profitA = solveKnapsackRecursive(bagA, profits, weights, capacity);
+                //Console.WriteLine("Added fruit index: " + index); 
+                // Get the profit if we grab the first item and then recursively get the highest profit 
+                profit1 = profits[index] + recursiveSolveKnapsack(profits, weights, capacity - weights[index], index + 1, profitCache);
             }
-            
-            var profitNoA = solveKnapsackRecursive(bagNoA, profits, weights, capacity);
+            int profit2 = recursiveSolveKnapsack(profits, weights, capacity, index + 1, profitCache);
 
-            Console.WriteLine("wieghtNoA: " + profitNoA);
-            Console.WriteLine("wieghtA: " + profitA);
+            //Console.WriteLine("profit1: " + profit1 + " profit2: " + profit2);
 
-            if (profitA > profitNoA)
-                return profitA;
+            int maxProfit = Math.Max(profit1, profit2);
 
-            return profitNoA;
+            // Store the profit we've found
+            profitCache[capacity, index] = maxProfit;
+
+            return maxProfit;
         }
 
         static void Main(string[] args)
