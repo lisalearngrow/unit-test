@@ -29,13 +29,13 @@ namespace TestService
 
         public int solveKnapsack(int[] profits, int[] weights, int capacity)
         {
-            int[,] profitCache = new int[capacity + 1, profits.Length + 1];
+            int?[,] profitCache = new int?[capacity + 1, profits.Length + 1];
             return recursiveSolveKnapsack(profits, weights, capacity, 0, profitCache);
         }
 
         // capacity decreases as we add weight
         // OPTIMIZATION: I can cache the results using the capacity & index
-        public int recursiveSolveKnapsack(int[] profits, int[] weights, int capacity, int index, int[,] profitCache)
+        public int recursiveSolveKnapsack(int[] profits, int[] weights, int capacity, int index, int?[,] profitCache)
         {
             // check to see if we are over capacity or out of the index range.  
             // This means there was no fruit that would fit in the bag
@@ -43,8 +43,8 @@ namespace TestService
                 return 0;
 
             // If this profit is in the cache, simply return it
-            if (profitCache[capacity, index] > 0)
-                return profitCache[capacity, index];
+            if (profitCache[capacity, index] != null)
+                return (int)profitCache[capacity, index];
 
             //Console.WriteLine("Capacity: " + capacity + " Index: " + index + " Weight: " + weights[index] + " Profit: " + profits[index]);
 
