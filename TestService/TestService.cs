@@ -18,53 +18,70 @@ namespace TestService
 
     class Solution
     {
-        public int findLCSLength(string s1, string s2)
+        // Complete the maxSubsetSum function below.
+        static int maxSubsetSum(int[] arr)
         {
-            // TODO: Optimize by going over the short string
-            Console.WriteLine("Starting\n\n\n");
-            Console.WriteLine(" s1: " + s1 + " s2: " + s2);
-            var longestStr = getLCSRecursive(s1, s2, 0, "");
-            return longestStr.Length;
+
+            Console.WriteLine("STARTING");
+
+            var result = maxSubsetSumRecursive(arr, 0, new List<int>());
+
+            Console.WriteLine("RESULT: " + result);
+
+            if (result < 0)
+                return 0;
+
+            return result;
         }
 
-        
-        public string getLCSRecursive(String s1, String s2, int index, string currentString)
+        static int maxSubsetSumRecursive(int[] arr, int index, List<int> selected)
         {
-            if (s1 == null || s1 == "" || s2 == "" || s2 == null || index > (s1.Length -1) )
-                return "";
 
-            Console.WriteLine(" index: " + index + " currentString: " + currentString);
+            // Exit condition (The index has reached the end)
+            if (index >= arr.Length || arr.Length < 1)
+                return 0;
 
-            // Don't select the letter, skip over it
-            var choice2 = getLCSRecursive(s1, s2, index + 1, currentString);
+            if (selected == null)
+                selected = new List<int>();
 
-            // Select the letter
-            var choice1 = "";
-            var potentialstr = currentString + s1[index];
+            // Choose the current number, index + 2
+            var choice1 = new List<int>(selected);
+            choice1.Add(arr[index]);
 
-            // Add the letter we're looking at IF it meets the constraint
-            if (s2.Contains(potentialstr))
+            var choice1sum = 0;
+            // Only choose the number if it's positive.  But I'd still 
+            if (arr[index] > 0)
+                choice1sum = arr[index] + maxSubsetSumRecursive(arr, index + 2, choice1);
+
+            // Don't choose the next number, index + 1
+            var choice2sum = maxSubsetSumRecursive(arr, index + 1, selected);
+            Console.WriteLine(" ");
+            Console.WriteLine("Set: ");
+            for (int i = 0; i < choice1.Count; i++)
             {
-                Console.WriteLine("Added char: " + s1[index]);
-                // Add the letter + the next recursive values
-                choice1 = s1[index] + getLCSRecursive(s1, s2, index + 1, potentialstr);
+                Console.WriteLine("   Num: " + choice1[i]);
             }
 
-            if (choice1.Length > choice2.Length)
-            {
-                Console.WriteLine("Returned Add string: " + choice1);
-                return choice1;
-            }
+            Console.WriteLine("Sums: ");
+            Console.WriteLine(choice1sum);
+            Console.WriteLine(choice2sum);
+            Console.WriteLine(" ");
 
-            Console.WriteLine("Returned Skip string: " + choice2);
-            return choice2;
+            if (choice1sum > choice2sum)
+                return choice1sum;
+
+            // Get the higher sum of both arrays
+            return choice2sum;
         }
+
 
         static void Main(string[] args)
         {
-            Solution lcs = new Solution();
-            Console.WriteLine(lcs.findLCSLength("abdca", "cbda"));
-            Console.WriteLine(lcs.findLCSLength("passport", "ppsspt"));
+            Solution run = new Solution();
+            int[] arr = new int[] { -2, 1, 3, -4, 5 };
+
+            Console.WriteLine(maxSubsetSum(arr));
+            
         }
     }
 }
