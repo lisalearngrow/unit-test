@@ -18,13 +18,16 @@ namespace TestService
 
     class Solution
     {
+        private Dictionary<string, int> _cache;
+
         // Complete the maxSubsetSum function below.
         static int maxSubsetSum(int[] arr)
         {
-
             Console.WriteLine("STARTING");
 
-            var result = maxSubsetSumRecursive(arr, 0, new List<int>());
+            Solution run = new Solution();
+            run._cache = new Dictionary<string, int>();
+            var result = run.maxSubsetSumRecursive(arr, 0);
 
             Console.WriteLine("RESULT: " + result);
 
@@ -34,46 +37,54 @@ namespace TestService
             return result;
         }
 
-        static int maxSubsetSumRecursive(int[] arr, int index, List<int> selected)
+        int maxSubsetSumRecursive(int[] arr, int index)
         {
 
             // Exit condition (The index has reached the end)
-            if (index >= arr.Length || arr.Length < 1)
+            if (index >= arr.Length)
                 return 0;
 
-            if (selected == null)
-                selected = new List<int>();
+            // Create the hash
+            string hash = index.ToString();
 
-            // Choose the current number, index + 2
-            var choice1 = new List<int>(selected);
-            choice1.Add(arr[index]);
+            Console.WriteLine("Hash: " + hash);
 
-            var choice1sum = 0;
-            // Only choose the number if it's positive.  But I'd still 
-            if (arr[index] > 0)
-                choice1sum = arr[index] + maxSubsetSumRecursive(arr, index + 2, choice1);
-
-            // Don't choose the next number, index + 1
-            var choice2sum = maxSubsetSumRecursive(arr, index + 1, selected);
-            Console.WriteLine(" ");
-            Console.WriteLine("Set: ");
-            for (int i = 0; i < choice1.Count; i++)
+            // Only grab from cache if there was anything selected
+            if (this._cache.ContainsKey(hash))
             {
-                Console.WriteLine("   Num: " + choice1[i]);
+                Console.WriteLine("Got cache hit! ");
+                return _cache[hash];
             }
 
+            // Choose the current number, index + 2
+            var choice1Sum = 0;
+            // Only choose the number if it's positive.  
+            if (arr[index] > 0)
+            {
+                hash += arr[index] + "|";
+                choice1Sum = arr[index] + maxSubsetSumRecursive(arr, index + 2);
+            }
+
+            Console.WriteLine(" ");
+            Console.WriteLine("Set: ");
+            
+
+            // Don't choose the next number, index + 1
+            var choice2Sum = maxSubsetSumRecursive(arr, index + 1);
+            
             Console.WriteLine("Sums: ");
-            Console.WriteLine(choice1sum);
-            Console.WriteLine(choice2sum);
+            Console.WriteLine(choice1Sum);
+            Console.WriteLine(choice2Sum);
             Console.WriteLine(" ");
 
-            if (choice1sum > choice2sum)
-                return choice1sum;
+            if (choice1Sum > choice2Sum)
+                _cache[hash] = choice1Sum;
+            else
+                _cache[hash] = choice2Sum;
 
             // Get the higher sum of both arrays
-            return choice2sum;
+            return this._cache[hash];
         }
-
 
         static void Main(string[] args)
         {
