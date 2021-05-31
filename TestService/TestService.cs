@@ -23,13 +23,13 @@ namespace TestService
         // Complete the maxSubsetSum function below.
         static int maxSubsetSum(int[] arr)
         {
-            Console.WriteLine("STARTING");
+            //Console.WriteLine("STARTING");
 
             Solution run = new Solution();
             run._cache = new Dictionary<string, int>();
             var result = run.maxSubsetSumRecursive(arr, 0);
 
-            Console.WriteLine("RESULT: " + result);
+            //Console.WriteLine("RESULT: " + result);
 
             if (result < 0)
                 return 0;
@@ -47,12 +47,12 @@ namespace TestService
             // Create the hash
             string hash = index.ToString();
 
-            Console.WriteLine("Hash: " + hash);
+            //Console.WriteLine("Hash: " + hash);
 
             // Only grab from cache if there was anything selected
             if (this._cache.ContainsKey(hash))
             {
-                Console.WriteLine("Got cache hit! ");
+                //Console.WriteLine("Got cache hit! ");
                 return _cache[hash];
             }
 
@@ -65,17 +65,17 @@ namespace TestService
                 choice1Sum = arr[index] + maxSubsetSumRecursive(arr, index + 2);
             }
 
-            Console.WriteLine(" ");
-            Console.WriteLine("Set: ");
+            //Console.WriteLine(" ");
+            //Console.WriteLine("Set: ");
             
 
             // Don't choose the next number, index + 1
             var choice2Sum = maxSubsetSumRecursive(arr, index + 1);
             
-            Console.WriteLine("Sums: ");
-            Console.WriteLine(choice1Sum);
-            Console.WriteLine(choice2Sum);
-            Console.WriteLine(" ");
+            //Console.WriteLine("Sums: ");
+            //Console.WriteLine(choice1Sum);
+            //Console.WriteLine(choice2Sum);
+            //Console.WriteLine(" ");
 
             if (choice1Sum > choice2Sum)
                 _cache[hash] = choice1Sum;
